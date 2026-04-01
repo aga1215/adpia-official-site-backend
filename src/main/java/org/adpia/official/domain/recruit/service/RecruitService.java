@@ -104,6 +104,8 @@ public class RecruitService {
 		RecruitPost post = postRepository.findByIdAndDeletedAtIsNull(postId)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
 
+		validateReadPermission(post.getBoardCode(), actor);
+
 		if (post.getStatus() == RecruitPostStatus.DRAFT) {
 			if (!canReadDraft(post, actor)) {
 				throw new IllegalArgumentException("존재하지 않는 게시글입니다.");
@@ -132,7 +134,9 @@ public class RecruitService {
 	}
 
 	@Transactional(readOnly = true)
-	public Page<RecruitPostResponse> list(RecruitBoardCode boardCode, Pageable pageable) {
+	public Page<RecruitPostResponse> list(RecruitBoardCode boardCode, Pageable pageable, Actor actor) {
+		validateReadPermission(boardCode, actor);
+
 		Page<RecruitPost> page = postRepository
 			.findByBoardCodeAndStatusAndDeletedAtIsNullOrderByPinnedDescPinnedAtDescCreatedAtDesc(
 				boardCode,
@@ -211,6 +215,16 @@ public class RecruitService {
 			if (!(actor.role() == MemberRole.ROLE_SUPER_ADMIN || actor.role() == MemberRole.ROLE_PRESIDENT)) {
 				throw new IllegalStateException("해당 게시판 작성 권한이 없습니다.");
 			}
+		}
+	}
+
+	private void validateReadPermission(RecruitBoardCode boardCode, Actor actor) {
+		if (boardCode.allowGuestRead()) {
+			return;
+		}
+
+		if (actor.isGuest()) {
+			throw new IllegalStateException("로그인 후 접근할 수 있습니다.");
 		}
 	}
 

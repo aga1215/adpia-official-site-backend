@@ -30,7 +30,8 @@ public class RecruitController {
 		@RequestParam(defaultValue = "0") int page,
 		@RequestParam(defaultValue = "10") int size
 	) {
-		return recruitService.list(boardCode, PageRequest.of(page, size));
+		Actor actor = actorResolver.resolveOrGuest();
+		return recruitService.list(boardCode, PageRequest.of(page, size), actor);
 	}
 
 	@GetMapping("/posts/{id}")

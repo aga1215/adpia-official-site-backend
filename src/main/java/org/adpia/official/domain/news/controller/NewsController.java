@@ -28,7 +28,8 @@ public class NewsController {
 		@RequestParam(defaultValue = "0") int page,
 		@RequestParam(defaultValue = "10") int size
 	) {
-		return recruitService.list(RecruitBoardCode.NEWS, PageRequest.of(page, size));
+		Actor actor = actorResolver.resolveOrGuest();
+		return recruitService.list(RecruitBoardCode.NEWS, PageRequest.of(page, size), actor);
 	}
 
 	@GetMapping("/posts/{id}")

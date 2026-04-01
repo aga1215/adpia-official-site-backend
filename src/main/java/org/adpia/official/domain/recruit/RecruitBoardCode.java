@@ -5,7 +5,8 @@ public enum RecruitBoardCode {
 	QA,
 	NEWS,
 	HUNDRED_QNA,
-	THREE_MIN_SPEECH;
+	THREE_MIN_SPEECH,
+	SEMINAR;
 
 	public boolean isPinnable() {
 		return true;
@@ -13,7 +14,7 @@ public enum RecruitBoardCode {
 
 	public boolean isCommentEnabledByDefault() {
 		return switch (this) {
-			case NOTICE -> false;
+			case NOTICE, SEMINAR -> false;
 			case QA, NEWS, HUNDRED_QNA, THREE_MIN_SPEECH -> true;
 		};
 	}
@@ -24,5 +25,12 @@ public enum RecruitBoardCode {
 
 	public boolean isAdminWriteOnly() {
 		return this == NOTICE || this == NEWS;
+	}
+
+	public boolean allowGuestRead() {
+		return switch (this) {
+			case NOTICE, QA, NEWS -> true;
+			case HUNDRED_QNA, THREE_MIN_SPEECH, SEMINAR -> false;
+		};
 	}
 }
