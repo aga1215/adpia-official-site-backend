@@ -1,12 +1,17 @@
 package org.adpia.official.domain.recruit;
 
+import lombok.Getter;
+
+@Getter
 public enum RecruitBoardCode {
 	NOTICE,
 	QA,
 	NEWS,
 	HUNDRED_QNA,
 	THREE_MIN_SPEECH,
-	SEMINAR;
+	SEMINAR,
+	ACADEMIC,
+	OPERATION;
 
 	public boolean isPinnable() {
 		return true;
@@ -14,7 +19,7 @@ public enum RecruitBoardCode {
 
 	public boolean isCommentEnabledByDefault() {
 		return switch (this) {
-			case NOTICE, SEMINAR -> false;
+			case NOTICE, SEMINAR, ACADEMIC,OPERATION -> false;
 			case QA, NEWS, HUNDRED_QNA, THREE_MIN_SPEECH -> true;
 		};
 	}
@@ -30,7 +35,7 @@ public enum RecruitBoardCode {
 	public boolean allowGuestRead() {
 		return switch (this) {
 			case NOTICE, QA, NEWS -> true;
-			case HUNDRED_QNA, THREE_MIN_SPEECH, SEMINAR -> false;
+			case HUNDRED_QNA, THREE_MIN_SPEECH, SEMINAR, ACADEMIC, OPERATION -> false;
 		};
 	}
 }
