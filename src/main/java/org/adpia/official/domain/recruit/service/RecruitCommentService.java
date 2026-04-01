@@ -39,8 +39,12 @@ public class RecruitCommentService {
 
 	@Transactional(readOnly = true)
 	public List<RecruitCommentResponse> list(Long postId, RecruitService.Actor actor) {
-		postRepository.findByIdAndDeletedAtIsNull(postId)
+		RecruitPost post = postRepository.findByIdAndDeletedAtIsNull(postId)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
+
+		if (!post.getBoardCode().allowGuestRead() && actor.isGuest()) {
+			throw new IllegalStateException("로그인 후 접근할 수 있습니다.");
+		}
 
 		List<RecruitComment> all = commentRepository.findByPostIdOrderByCreatedAtAsc(postId);
 

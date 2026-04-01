@@ -34,7 +34,8 @@ public class HundredQnaController {
 		@RequestParam(defaultValue = "0") int page,
 		@RequestParam(defaultValue = "10") int size
 	) {
-		return recruitService.list(RecruitBoardCode.HUNDRED_QNA, PageRequest.of(page, size));
+		Actor actor = actorResolver.resolveOrGuest();
+		return recruitService.list(RecruitBoardCode.HUNDRED_QNA, PageRequest.of(page, size), actor);
 	}
 
 	@GetMapping("/posts/{id}")
