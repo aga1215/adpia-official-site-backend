@@ -34,14 +34,16 @@ public class RecruitPostResponse {
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
 
+	private String thumbnailUrl;
+
 	private List<RecruitBlockResponse> blocks;
 
 	public static RecruitPostResponse from(RecruitPost post, List<RecruitBlockResponse> blocks) {
-		return from(post, blocks, false, post.getAuthorName(), false);
+		return from(post, blocks, false, post.getAuthorName(), false, null);
 	}
 
 	public static RecruitPostResponse from(RecruitPost post, List<RecruitBlockResponse> blocks, boolean locked) {
-		return from(post, blocks, locked, post.getAuthorName(), false);
+		return from(post, blocks, locked, post.getAuthorName(), false, null);
 	}
 
 	public static RecruitPostResponse from(
@@ -50,7 +52,7 @@ public class RecruitPostResponse {
 		boolean locked,
 		String displayAuthorName
 	) {
-		return from(post, blocks, locked, displayAuthorName, false);
+		return from(post, blocks, locked, displayAuthorName, false, null);
 	}
 
 	public static RecruitPostResponse from(
@@ -59,6 +61,17 @@ public class RecruitPostResponse {
 		boolean locked,
 		String displayAuthorName,
 		boolean likedByMe
+	) {
+		return from(post, blocks, locked, displayAuthorName, likedByMe, null);
+	}
+
+	public static RecruitPostResponse from(
+		RecruitPost post,
+		List<RecruitBlockResponse> blocks,
+		boolean locked,
+		String displayAuthorName,
+		boolean likedByMe,
+		String thumbnailUrl
 	) {
 		return RecruitPostResponse.builder()
 			.id(post.getId())
@@ -77,6 +90,7 @@ public class RecruitPostResponse {
 			.viewCount(post.getViewCount())
 			.createdAt(post.getCreatedAt())
 			.updatedAt(post.getUpdatedAt())
+			.thumbnailUrl(thumbnailUrl)
 			.blocks(blocks)
 			.build();
 	}

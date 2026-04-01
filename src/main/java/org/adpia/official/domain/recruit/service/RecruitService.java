@@ -104,6 +104,9 @@ public class RecruitService {
 		RecruitPost post = postRepository.findByIdAndDeletedAtIsNull(postId)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
 
+		if (actor.isGuest() && !post.getBoardCode().allowGuestRead()) {
+			throw new IllegalStateException("로그인 후 접근할 수 있습니다.");
+		}
 		validateReadPermission(post.getBoardCode(), actor);
 
 		if (post.getStatus() == RecruitPostStatus.DRAFT) {
@@ -135,7 +138,9 @@ public class RecruitService {
 
 	@Transactional(readOnly = true)
 	public Page<RecruitPostResponse> list(RecruitBoardCode boardCode, Pageable pageable, Actor actor) {
-		validateReadPermission(boardCode, actor);
+		if (actor.isGuest() && !boardCode.allowGuestRead()) {
+			throw new IllegalStateException("로그인 후 접근할 수 있습니다.");
+		}
 
 		Page<RecruitPost> page = postRepository
 			.findByBoardCodeAndStatusAndDeletedAtIsNullOrderByPinnedDescPinnedAtDescCreatedAtDesc(
@@ -146,7 +151,18 @@ public class RecruitService {
 
 		return page.map(p -> {
 			String displayAuthor = resolveDisplayAuthorName(p);
-			return RecruitPostResponse.from(p, List.of(), false, displayAuthor, false);
+
+			boolean likedByMe = false;
+			if (!actor.isGuest()) {
+				likedByMe = postLikeRepository.existsByPostIdAndMemberId(p.getId(), actor.memberId());
+			}
+
+			String thumbnailUrl = null;
+			if (p.getBoardCode() == RecruitBoardCode.ACTIVITY_PHOTO) {
+				thumbnailUrl = resolveThumbnailUrl(p.getId());
+			}
+
+			return RecruitPostResponse.from(p, List.of(), false, displayAuthor, likedByMe, thumbnailUrl);
 		});
 	}
 
@@ -402,5 +418,14 @@ public class RecruitService {
 	public record Actor(Long memberId, String displayName, MemberRole role) {
 		public boolean isGuest() { return memberId == null; }
 		public static Actor guest() { return new Actor(null, "GUEST", null); }
+	}
+
+	private String resolveThumbnailUrl(Long postId) {
+		return blockRepository.findByPostIdOrderBySortOrderAsc(postId).stream()
+			.filter(block -> block.getType() == RecruitBlockType.IMAGE)
+			.map(RecruitPostBlock::getUrl)
+			.filter(url -> url != null && !url.isBlank())
+			.findFirst()
+			.orElse(null);
 	}
 }
