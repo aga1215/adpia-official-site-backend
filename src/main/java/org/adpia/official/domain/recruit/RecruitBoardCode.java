@@ -15,7 +15,12 @@ public enum RecruitBoardCode {
 	COMMUNITY_NOTICE,
 	AD_CHANCE,
 	ACTIVITY_PHOTO,
-	OB_BOARD;
+	OB_BOARD,
+
+	COMPETITION_PT,
+	SOCIAL_PROJECT,
+	AD_CONTEST,
+	AD_INTRODUCTION;
 
 	public boolean isPinnable() {
 		return true;
@@ -27,7 +32,8 @@ public enum RecruitBoardCode {
 				 COMMUNITY_NOTICE, AD_CHANCE -> false;
 
 			case QA, HUNDRED_QNA, THREE_MIN_SPEECH,
-				 ACTIVITY_PHOTO, OB_BOARD -> true;
+				 ACTIVITY_PHOTO, OB_BOARD,
+				 COMPETITION_PT, SOCIAL_PROJECT, AD_CONTEST, AD_INTRODUCTION -> true;
 		};
 	}
 
