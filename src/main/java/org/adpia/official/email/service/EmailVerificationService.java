@@ -95,7 +95,7 @@ public class EmailVerificationService {
 		return """
                 안녕하세요, ADPIA입니다.
 
-                아래 인증 코드를 회원가입 페이지에 입력해주세요.
+                아래 인증 코드를 입력해주세요.
 
                 인증 코드: %s
 
