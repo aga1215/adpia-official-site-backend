@@ -6,6 +6,6 @@ import jakarta.validation.constraints.NotNull;
 public record PresignRequest(
 	@NotBlank String boardCode,
 	@NotNull Long postId,
-	@NotBlank String contentType,
+	String contentType,
 	@NotBlank String originalFilename
 ) {}
