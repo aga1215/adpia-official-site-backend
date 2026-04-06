@@ -47,6 +47,9 @@ public class SecurityConfig {
 				.requestMatchers("/api/members/signup").permitAll()
 				.requestMatchers("/api/members/login").permitAll()
 				.requestMatchers("/api/members/refresh").permitAll()
+				.requestMatchers("/api/members/password/reset/send-code").permitAll()
+				.requestMatchers("/api/members/password/reset/verify-code").permitAll()
+				.requestMatchers("/api/members/password/reset/confirm").permitAll()
 
 				.requestMatchers(HttpMethod.GET, "/api/recruit/**").permitAll()
 				.requestMatchers(HttpMethod.POST, "/api/recruit/QA/**").permitAll()
