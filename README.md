@@ -3,8 +3,10 @@
 ADPIA 공식 홈페이지의 백엔드 서버입니다.  
 회원 인증, 게시판 정책, 관리자 기능, 비회원 Q&A, 파일 업로드를 담당합니다.
 
-> Service: https://adpia.or.kr
-> Frontend REPO: https://github.com/aga1215/adpia-official-site-frontend
+새탭으로 열기) ctrl+클릭
+> Service: <a href="https://adpia.or.kr" target="_blank" rel="noopener noreferrer">ADPIA Official Website</a>  
+> Frontend Repository: <a href="https://github.com/aga1215/adpia-official-site-frontend" target="_blank" rel="noopener noreferrer">adpia-backend</a>
+
 ---
 
 ## Overview
